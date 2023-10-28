@@ -20,7 +20,7 @@ namespace Hackathon.Services
             _userService = userService;
         }
 
-        public string EncodePassword(string password)
+        public static string EncodePassword(string password)
         {
             using (var hash = SHA1.Create())
             {

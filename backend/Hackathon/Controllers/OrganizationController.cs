@@ -38,21 +38,21 @@ namespace Hackathon.Controllers
             _organizationService.DeleteItem(getOrganizationDto);
             return new JsonResult(new { message = "успешно удалено" });
         }
-
+        [Authorize]
         [HttpPost("getshort")]
         public IActionResult GetShort(GetOrganizationDto getOrganizationDto)
         {
             var result = _organizationService.GetShortItem(getOrganizationDto);
             return new JsonResult(result);
         }
-
+        [Authorize]
         [HttpPost("getlong")]
         public IActionResult GetLong(GetOrganizationDto getOrganizationDto)
         {
             var result = _organizationService.GetLongItem(getOrganizationDto);
             return new JsonResult(result);
         }
-
+        [Authorize(Roles = "superadmin")]
         [HttpGet("getalllong")]
         public IActionResult GetAllLong()
         {
