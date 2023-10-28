@@ -10,6 +10,8 @@ namespace Hackathon.Controllers
         private readonly ICourseService _courseService;
         private readonly IEmployeeService _employeeService;
         private readonly IDepartmentService _departmentService;
+
+        public record class GetAllCourses(int DepartmentId);
         public CoursesController(ICourseService courseService, IEmployeeService employeeService, IDepartmentService departmentService)
         {
             _courseService = courseService;
@@ -72,14 +74,14 @@ namespace Hackathon.Controllers
 
         [Authorize(Roles = "admin, hr")]
         [HttpPost("getall")]
-        public IActionResult GetAll(GetDepartmentDto getDepartment)
+        public IActionResult GetAll(GetAllCourses allCourses)
         {
 
-            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), getDepartment.Id))
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), allCourses.DepartmentId))
             {
                 return BadRequest(new JsonResult(new { message = "нет такого курса" }));
             }
-            var result = _courseService.GetItemDtoAll(getDepartment);
+            var result = _courseService.GetItemDtoAll(allCourses.DepartmentId);
             return new JsonResult(result);
         }
 

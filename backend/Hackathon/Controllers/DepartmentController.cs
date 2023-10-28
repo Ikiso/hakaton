@@ -11,6 +11,8 @@ namespace Hackathon.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IEmployeeService _employeeService;
         private readonly IOrganizationService _organizationService;
+
+        public record class GetAllDepartment(int OrganizationId);
         public DepartmentController(IOrganizationService organizationService, IEmployeeService employeeService, IDepartmentService departmentService)
         {
             _organizationService = organizationService;
@@ -87,16 +89,16 @@ namespace Hackathon.Controllers
 
         [Authorize(Roles = "admin, user")]
         [HttpPost("getall")]
-        public IActionResult GetAll(GetOrganizationDto getOrganization)
+        public IActionResult GetAll(GetAllDepartment getAllDepartment)
         {
             var organizationUser = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
-            var organization = _organizationService.GetItem(getOrganization.Id);
+            var organization = _organizationService.GetItem(getAllDepartment.OrganizationId);
             if (organizationUser.Id != organization.Id)
             {
                 return BadRequest(new JsonResult(new { message = "нет такой организации" }));
             }
 
-            var result = _departmentService.GetAllItem(getOrganization);
+            var result = _departmentService.GetAllItem(getAllDepartment.OrganizationId);
             return new JsonResult(result);
         }
 

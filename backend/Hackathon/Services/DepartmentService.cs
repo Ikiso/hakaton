@@ -44,10 +44,10 @@ namespace Hackathon.Services
             return _context.Departments.Find(getDepartment.Id) != null;
         }
 
-        public List<DepartmentDto> GetAllItem(GetOrganizationDto getOrganization)
+        public List<DepartmentDto> GetAllItem(int OrganizationId)
         {
             var result = new List<DepartmentDto>();
-            foreach (var item in _context.Departments.Where(a=>a.OrganizationId == getOrganization.Id).ToList())
+            foreach (var item in _context.Departments.Where(a=>a.OrganizationId == OrganizationId).ToList())
             {
                 result.Add(new DepartmentDto() { Id = item.Id, Name = item.Name });
             }

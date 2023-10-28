@@ -54,10 +54,10 @@ namespace Hackathon.Services
             return courseDto;
         }
 
-        public List<CourseDto> GetItemDtoAll(GetDepartmentDto departmentDto)
+        public List<CourseDto> GetItemDtoAll(int DepartmentId)
         {
             var result = new List<CourseDto>();
-            foreach (var course in _context.Courses.Where(a=>a.DepartmentId == departmentDto.Id).ToList())
+            foreach (var course in _context.Courses.Where(a=>a.DepartmentId == DepartmentId).ToList())
             {
                 result.Add(new CourseDto(course.Id, course.Name, course.Description, course.DepartmentId));
             }
