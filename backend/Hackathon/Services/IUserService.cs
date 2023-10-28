@@ -8,5 +8,6 @@ namespace Hackathon.Services
         User GetItemWithAccount(string email);
         User GetItem(string email);
         User GetItemById(int id);
+        bool UserExistsInDepartament(int idDepartament, string email);
     }
 }

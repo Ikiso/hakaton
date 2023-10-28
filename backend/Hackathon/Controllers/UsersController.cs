@@ -18,7 +18,7 @@ namespace Hackathon.Controllers
             _employeeService = employeeService;
         }
 
-        [Authorize(Roles = "admin,superadmin")]
+        //[Authorize(Roles = "admin,superadmin")]
         [HttpPost("registration")]
         public IActionResult Registration(EmployeeRegistrationDto input)
         {

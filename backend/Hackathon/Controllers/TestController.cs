@@ -39,7 +39,7 @@ namespace Hackathon.Controllers
         }
 
         [Authorize(Roles = "admin,superadmin,hr")]
-        [HttpGet("getallshort")]
+        [HttpPost("getallshort")]
         public IActionResult GetAllShort(GetAllTestsDto input)
         {
             var result = _testService.GetAllShort(input);
@@ -55,7 +55,7 @@ namespace Hackathon.Controllers
         }
 
         [Authorize(Roles = "admin,superadmin,hr")]
-        [HttpGet("getalllong")]
+        [HttpPost("getalllong")]
         public IActionResult GetAllLong(GetAllTestsDto input)
         {
             var result = _testService.GetAllLong(input);
