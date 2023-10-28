@@ -1,1 +1,1 @@
-# hakaton-frontend
+# hakaton
