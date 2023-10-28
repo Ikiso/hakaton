@@ -40,6 +40,10 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>((options) => options.UseSqlite(connectionString));
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IEducationalMaterialService, EducationalMaterialService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 var app = builder.Build();

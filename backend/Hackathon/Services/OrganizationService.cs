@@ -11,6 +11,14 @@ namespace Hackathon.Services
         {
             _context = context;
         }
+
+        public void Adddepartment(Organization org,  Department department)
+        {
+            var organ = _context.Organizations.FirstOrDefault(a => a.Id == org.Id)!;
+            organ.Departments.Add(department);
+
+        }
+
         public Organization AddItem(OrganizationAddDto newOrganization)
         {
             var organization = new Organization()
@@ -58,7 +66,7 @@ namespace Hackathon.Services
             return _context.Organizations.Find(getOrganization.Id) != null;
         }
 
-        public List<LongOrganizationDto> GetAllLongItem(GetOrganizationDto getOrganization)
+        public List<LongOrganizationDto> GetAllLongItem()
         {
             var result = new List<LongOrganizationDto>();
             foreach (var organization in _context.Organizations.Include(a => a.Tariff).ToList())
@@ -78,7 +86,7 @@ namespace Hackathon.Services
             return result;
         }
 
-        public List<ShortOrganizationDto> GetAllShortItem(GetOrganizationDto getOrganization)
+        public List<ShortOrganizationDto> GetAllShortItem()
         {
             var result = new List<ShortOrganizationDto>();
             foreach (var organization in _context.Organizations.Include(a => a.Tariff).ToList())
@@ -91,6 +99,11 @@ namespace Hackathon.Services
             }
 
             return result;
+        }
+
+        public Organization GetItem(int id)
+        {
+            return _context.Organizations.Include(a=>a.Departments).FirstOrDefault(a => a.Id == id)!;
         }
 
         public LongOrganizationDto GetLongItem(GetOrganizationDto getOrganization)
