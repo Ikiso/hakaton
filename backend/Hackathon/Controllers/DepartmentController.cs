@@ -1,4 +1,5 @@
 ﻿using Hackathon.Dtos;
+using Hackathon.Models;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,21 +9,106 @@ namespace Hackathon.Controllers
     public class DepartmentController : ApiV1Conntroller
     {
         private readonly IDepartmentService _departmentService;
-        private readonly IUserService _userService;
+        private readonly IEmployeeService _employeeService;
         private readonly IOrganizationService _organizationService;
-        public DepartmentController(IOrganizationService organizationService, IUserService userService, IDepartmentService departmentService)
+        public DepartmentController(IOrganizationService organizationService, IEmployeeService employeeService, IDepartmentService departmentService)
         {
             _organizationService = organizationService;
-            _userService = userService;
+            _employeeService = employeeService;
             _departmentService = departmentService;
 
         }
-        [Authorize(Roles =("director"))]
+
+        [Authorize(Roles = "admin")]
         [HttpPost("add")]
         public IActionResult Add(DepartmentAddDto departmentAdd)
         {
-           
+
+            var organization = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
+            var department = _departmentService.AddItem(departmentAdd);
+            _organizationService.Adddepartment(organization, department);
             return new JsonResult(new { message = "успешно добавлено" });
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("addchild")]
+        public IActionResult AddChild(DepartmentAddDto departmentAdd)
+        {
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), departmentAdd.DepartmentId))
+            {
+                return BadRequest(new JsonResult(new { message = "нет такого отдела" }));
+            }
+
+            var organization = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
+            var department = _departmentService.AddItem(departmentAdd);
+            _organizationService.Adddepartment(organization, department);
+            return new JsonResult(new { message = "успешно добавлено" });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("delete")]
+        public IActionResult Delete(GetDepartmentDto getDepartment)
+        {
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), getDepartment.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "нет такого отдела" }));
+            }
+
+            _departmentService.DeleteItem(getDepartment);
+            return new JsonResult(new { message = "успешно удалено" });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("edit")]
+        public IActionResult Edit(DepartmentEditDto editDepartment)
+        {
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), editDepartment.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "нет такого отдела" }));
+            }
+
+            var result = _departmentService.EditItem(editDepartment);
+            return new JsonResult(new { message = "успешно отредактировано" });
+        }
+
+
+        [Authorize(Roles = "admin, user")]
+        [HttpPost("get")]
+        public IActionResult Get(GetDepartmentDto getDepartment)
+        {
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), getDepartment.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "нет такого отдела" }));
+            }
+
+            var result = _departmentService.GetItem(getDepartment);
+            return new JsonResult(result);
+        }
+
+        [Authorize(Roles = "admin, user")]
+        [HttpPost("getall")]
+        public IActionResult GetAll(GetOrganizationDto getOrganization)
+        {
+            var organizationUser = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
+            var organization = _organizationService.GetItem(getOrganization.Id);
+            if (organizationUser.Id != organization.Id)
+            {
+                return BadRequest(new JsonResult(new { message = "нет такой организации" }));
+            }
+
+            var result = _departmentService.GetAllItem(getOrganization);
+            return new JsonResult(result);
+        }
+
+        private bool CheckOrganization(int idEmploye, int departmentId)
+        {
+            var organizationUser = _employeeService.GetOrganizationById(idEmploye);
+            var organization = _departmentService.ItemGet(departmentId).Organization;
+            if (organization.Id != organizationUser.Id)
+                return false;
+
+            return true;
+        }
+
     }
 }

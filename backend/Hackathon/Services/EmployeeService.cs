@@ -32,6 +32,13 @@ namespace Hackathon.Services
 
         }
 
+        public Organization GetOrganizationById(int id)
+        {
+            return _context.Employees.Include(e => e.Department).
+                ThenInclude(d => d.Organization).
+                FirstOrDefault(e => e.Id == id)!.Department.Organization;
+        }
+
         public string GetOrganizationNameById(int id)
         {
             return _context.Employees.Include(e => e.Department).

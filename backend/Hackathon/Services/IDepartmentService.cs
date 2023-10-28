@@ -7,8 +7,9 @@ namespace Hackathon.Services
     {
         public Department AddItem(DepartmentAddDto newDepartment);
         public Department EditItem(DepartmentEditDto departmentEdit);
-        public DepartmentDto GetItem(GetOrganizationDto getOrganization);
-        public List<DepartmentDto> GetAllItem();
+        public DepartmentDto GetItem(GetDepartmentDto getDepartment);
+        public Department ItemGet(int id);
+        public List<DepartmentDto> GetAllItem(GetOrganizationDto getOrganization);
         public DepartmentTreeDto GetTreeItem(GetDepartmentDto getDepartment);
         public void DeleteItem(GetDepartmentDto getDepartment);
         public bool ElementExists(GetDepartmentDto getDepartment);

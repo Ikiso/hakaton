@@ -44,23 +44,28 @@ namespace Hackathon.Services
             return _context.Departments.Find(getDepartment.Id) != null;
         }
 
-        public List<DepartmentDto> GetAllItem()
+        public List<DepartmentDto> GetAllItem(GetOrganizationDto getOrganization)
         {
             var result = new List<DepartmentDto>();
-            foreach (var item in _context.Departments.ToList())
+            foreach (var item in _context.Departments.Where(a=>a.OrganizationId == getOrganization.Id).ToList())
             {
                 result.Add(new DepartmentDto() { Id = item.Id, Name = item.Name });
             }
             return result;
         }
 
-        public DepartmentDto GetItem(GetOrganizationDto getOrganization)
+        public DepartmentDto GetItem(GetDepartmentDto getDepartment)
         {
             var result = new DepartmentDto();
-            var departnent = _context.Departments.Find(getOrganization.Id)!;
+            var departnent = _context.Departments.Find(getDepartment.Id)!;
             result.Name = departnent.Name;
             result.Id = departnent.Id;
             return result;
+        }
+
+        public Department ItemGet(int id)
+        {
+            return _context.Departments.Include(a=>a.Organization).FirstOrDefault(a=>a.Id == id)!;           
         }
 
         public DepartmentTreeDto GetTreeItem(GetDepartmentDto getDepartment)

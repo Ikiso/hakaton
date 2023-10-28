@@ -1,4 +1,5 @@
 ﻿using Hackathon.Dtos;
+using Hackathon.Models;
 
 namespace Hackathon.Services
 {
@@ -6,6 +7,7 @@ namespace Hackathon.Services
     {
         string GetRoleById(int id);
         string GetOrganizationNameById(int id);
+        Organization GetOrganizationById(int id);
         void AddItem(EmployeeRegistrationDto input);
     }
 }
