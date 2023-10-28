@@ -63,7 +63,7 @@ namespace Hackathon.Controllers
         [HttpPost("get")]
         public IActionResult Get(GetCourseDto getCourse)
         {
-            var course = _courseService.GetItem(getCourse);
+            var course = _courseService.GetItemDto(getCourse);
             if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), course.DepartmentId))
             {
                 return BadRequest(new JsonResult(new { message = "нет такого курса" }));
@@ -84,6 +84,7 @@ namespace Hackathon.Controllers
             var result = _courseService.GetItemDtoAll(allCourses.DepartmentId);
             return new JsonResult(result);
         }
+
 
         private bool CheckOrganization(int idEmploye, int departmentId)
         {

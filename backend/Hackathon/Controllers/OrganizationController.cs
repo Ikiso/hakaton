@@ -14,18 +14,33 @@ namespace Hackathon.Controllers
             _organizationService = organizationService;
             _employeeService = employeeService;
         }
-        //[Authorize(Roles = "superadmin")]
-        //[HttpPost("add")]
-        //public IActionResult Add(OrganizationAddDto organizationAdd)
-        //{
-        //    _organizationService.AddItem(organizationAdd);
-        //    return new JsonResult(new { message = "успешно добавлено" });
-        //}
+
+        [HttpPost("add")]
+        public IActionResult Add(OrganizationAddDto organizationAdd)
+        {
+            var organization = _organizationService.AddItem(organizationAdd);
+
+            var employeReg = new EmployeeRegistrationDto()
+            {
+                Email = organizationAdd.Email,
+                Firstname = organizationAdd.Firstname,
+                Patronymic = organizationAdd.Patronymic,
+                Surname = organizationAdd.Surname,
+                DepartmentId = organization.Departments.First().Id
+            };
+            var result = _employeeService.AddItemChef(employeReg);
+
+
+            return new JsonResult(result);
+        }
         [Authorize(Roles = "admin")]
         [HttpPost("edit")]
         public IActionResult Edit(OrganizationEditDto organizationEdit)
         {
-
+            if (OrganizationIsUser(Convert.ToInt32(HttpContext.User.Identity!.Name), organizationEdit.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "такой организации не существует" }));
+            }
             _organizationService.EditItem(organizationEdit);
             return new JsonResult(new { message = "успешно обновлено" });
         }
@@ -33,6 +48,7 @@ namespace Hackathon.Controllers
         [HttpPost("delete")]
         public IActionResult Delete(GetOrganizationDto getOrganizationDto)
         {
+           
             var organizationUser = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
             var orgaization = _organizationService.GetItem(getOrganizationDto.Id);
             _organizationService.DeleteItem(getOrganizationDto);
@@ -42,6 +58,10 @@ namespace Hackathon.Controllers
         [HttpPost("getshort")]
         public IActionResult GetShort(GetOrganizationDto getOrganizationDto)
         {
+            if (OrganizationIsUser(Convert.ToInt32(HttpContext.User.Identity!.Name), getOrganizationDto.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "такой организации не существует" }));
+            }
             var result = _organizationService.GetShortItem(getOrganizationDto);
             return new JsonResult(result);
         }
@@ -49,6 +69,10 @@ namespace Hackathon.Controllers
         [HttpPost("getlong")]
         public IActionResult GetLong(GetOrganizationDto getOrganizationDto)
         {
+            if (OrganizationIsUser(Convert.ToInt32(HttpContext.User.Identity!.Name), getOrganizationDto.Id))
+            {
+                return BadRequest(new JsonResult(new { message = "такой организации не существует" }));
+            }
             var result = _organizationService.GetLongItem(getOrganizationDto);
             return new JsonResult(result);
         }
@@ -60,11 +84,22 @@ namespace Hackathon.Controllers
             return new JsonResult(result);
         }
 
+        [Authorize(Roles = "superadmin")]
         [HttpGet("getallshort")]
         public IActionResult GetAllShort()
         {
             var result = _organizationService.GetAllShortItem();
             return new JsonResult(result);
         }
+
+        private bool OrganizationIsUser(int employeId, int organizationId)
+        {
+            var orgaizationUser = _employeeService.GetOrganizationById(employeId);
+            if (orgaizationUser.Id != organizationId)
+                return false;
+
+            return true;
+        }
+
     }
 }

@@ -42,7 +42,7 @@ namespace Hackathon.Controllers
             }
 
             var organization = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
-            var department = _departmentService.AddItem(departmentAdd);
+            var department = _departmentService.AddChildItem(departmentAdd);
             _organizationService.Adddepartment(organization, department);
             return new JsonResult(new { message = "успешно добавлено" });
         }
@@ -99,6 +99,17 @@ namespace Hackathon.Controllers
             }
 
             var result = _departmentService.GetAllItem(getAllDepartment.OrganizationId);
+            return new JsonResult(result);
+        }
+
+        [Authorize(Roles = "admin, user")]
+        [HttpGet("getall")]
+        public IActionResult GetAllNotParam()
+        {
+            var organizationUser = _employeeService.GetOrganizationById(Convert.ToInt32(HttpContext.User.Identity!.Name));
+          
+
+            var result = _departmentService.GetAllItem(organizationUser.Id);
             return new JsonResult(result);
         }
 

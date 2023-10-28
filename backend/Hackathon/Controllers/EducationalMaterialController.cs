@@ -1,4 +1,5 @@
 ﻿using Hackathon.Dtos;
+using Hackathon.Models;
 using Hackathon.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,11 @@ namespace Hackathon.Controllers
         [HttpPost("edit")]
         public IActionResult Edit(EducationalMaterialEdit materialEdit)
         {
- 
+            var material = _educationalMaterialService.GetItem(new EducationalMaterialGet(materialEdit.Id));
+            if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), material.CourseId))
+            {
+                return BadRequest(new JsonResult(new { message = "нет такого курса" }));
+            }
             if (!CheckOrganization(Convert.ToInt32(HttpContext.User.Identity!.Name), materialEdit.CourseId))
             {
                 return BadRequest(new JsonResult(new { message = "нет такого курса" }));
@@ -68,8 +73,8 @@ namespace Hackathon.Controllers
             {
                 return BadRequest(new JsonResult(new { message = "нет такого курса" }));
             }
-            _educationalMaterialService.GetItem(educationalMaterial);
-            return new JsonResult(new { message = "успешно обновлено" });
+            var result = _educationalMaterialService.GetItemDto(educationalMaterial);
+            return new JsonResult(result);
         }
 
         [Authorize(Roles = "admin, hr, user")]
@@ -80,8 +85,8 @@ namespace Hackathon.Controllers
             {
                 return BadRequest(new JsonResult(new { message = "нет такого курса" }));
             }
-            _educationalMaterialService.GetAllItemDto(getAllEducational.CourseId);
-            return new JsonResult(new { message = "успешно обновлено" });
+            var result = _educationalMaterialService.GetAllItemDto(getAllEducational.CourseId);
+            return new JsonResult(result);
         }
 
         private bool CheckOrganization(int idEmploye, int courseId)

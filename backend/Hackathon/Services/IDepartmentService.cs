@@ -13,5 +13,6 @@ namespace Hackathon.Services
         public DepartmentTreeDto GetTreeItem(GetDepartmentDto getDepartment);
         public void DeleteItem(GetDepartmentDto getDepartment);
         public bool ElementExists(GetDepartmentDto getDepartment);
+        public Department AddChildItem(DepartmentAddDto newDepartment);
     }
 }

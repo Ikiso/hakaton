@@ -22,6 +22,21 @@ namespace Hackathon.Services
             return department;
         }
 
+        public Department AddChildItem(DepartmentAddDto newDepartment)
+        {
+            var departament  = _context.Departments.FirstOrDefault(a=>a.Id == newDepartment.DepartmentId)!;
+            
+            var department = new Department()
+            {
+                Name = newDepartment.Name,
+                Organization = _context.Organizations.FirstOrDefault(a => a.Id == newDepartment.DepartmentId)!,
+                
+            };
+            _context.Add(department);
+            departament.ChildDepartment.Add(department);
+            return department;
+        }
+
         public void DeleteItem(GetDepartmentDto getDepartment)
         {
             var departament = _context.Departments.Find(getDepartment.Id)!;
@@ -33,7 +48,7 @@ namespace Hackathon.Services
         {
             var departament = _context.Departments.Find(departmentEdit.Id)!;
             departament.Name = departmentEdit.Name;
-            _context.Update(departament);
+            
             _context.SaveChanges();
             return departament;
 

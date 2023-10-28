@@ -28,6 +28,7 @@ namespace Hackathon.Services
         public void DelteItem(GetCourseDto getCourse)
         {
             _context.Courses.Remove(_context.Courses.Find(getCourse.Id)!);
+            _context.SaveChanges();
         }
 
         public Course EditItem(CourseEditDto editCourse)

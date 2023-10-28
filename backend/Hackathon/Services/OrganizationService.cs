@@ -16,6 +16,8 @@ namespace Hackathon.Services
         {
             var organ = _context.Organizations.FirstOrDefault(a => a.Id == org.Id)!;
             organ.Departments.Add(department);
+            _context.Organizations.Update(organ);
+            _context.SaveChanges();
 
         }
 
@@ -32,9 +34,13 @@ namespace Hackathon.Services
                 Tariff = _context.Tariffs.Find(newOrganization.IdTariff)!,
                 Color = _context.Colors.Find(1)!
             };
-
-
+            var department = new Department() { 
+                Name = "начальство",
+                Organization = organization
+            };
+            organization.Departments.Add(department);
             _context.Organizations.Add(organization);
+            _context.Departments.Add(department);
             _context.SaveChanges();
             return organization;
         }
