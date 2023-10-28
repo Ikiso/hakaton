@@ -14,7 +14,21 @@ namespace Hackathon.Controllers
             _testService = testService;
         }
 
-        [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr,user")]
+        [HttpPost("solution")]
+        public IActionResult Solution(AttemptTestDto input)
+        {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedEmployee(employeeId, input.TestId))
+            {
+                return NotFound();
+            }
+
+            var result = _testService.SolutionTest(input, employeeId);
+            return new JsonResult(result);
+        }
+
+            [Authorize(Roles = "admin,superadmin,hr")]
         [HttpPost("add")]
         public IActionResult Add(AddTestDto input)
         {

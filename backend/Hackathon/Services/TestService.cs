@@ -226,5 +226,40 @@ namespace Hackathon.Services
 
             return course.DepartmentId == employee.DepartmentId;
         }
+
+        public TestResultDto SolutionTest(AttemptTestDto input, int employeeId)
+        {
+            int maxPoints = 0;
+            int totalPoints = 0;
+
+            foreach (var opt in input.SelectedOptions)
+            {
+                var option = _context.Options.Include(o=>o.Question).FirstOrDefault(o=>o.Id == opt)!;
+                maxPoints += option.Question.Points;
+                if (option.IsCorrect)
+                {
+                    totalPoints += option.Question.Points;
+                }
+            }
+
+            var percent = (int)((double)totalPoints / (double)maxPoints * 100d);
+
+            PassedTests passedTest = new PassedTests()
+            {
+                Test = _context.Tests.Find(input.TestId)!,
+                Employee = _context.Employees.Find(employeeId)!,
+                CompletionPercent = percent
+            };
+
+            _context.PassedTests.Add(passedTest);
+            _context.SaveChanges();
+
+            return new TestResultDto()
+            {
+                Percent = percent,
+                ResultPoints = totalPoints,
+                TestId = input.TestId
+            };
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace Hackathon.Services
         bool IsExists(int id);
         bool AccessAllowedEmployee(int employeeId, int testId);
         bool AccessAllowedByCourseId(int employeeId, int courseId);
+        TestResultDto SolutionTest(AttemptTestDto input, int employeeId);
     }
 }
