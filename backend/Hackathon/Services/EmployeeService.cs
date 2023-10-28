@@ -26,6 +26,7 @@ namespace Hackathon.Services
 
             if (_userService.IsExists(input.Email))
             {
+                //TODO: Проерять при валидации существет ли работник с таким же подразделением или нет
                 employee = new Employee()
                 {
                     Department = department,
@@ -60,7 +61,8 @@ namespace Hackathon.Services
                     Account = account,
                     Firstname = input.Firstname,
                     Surname = input.Surname,
-                    Patronymic = input.Patronymic
+                    Patronymic = input.Patronymic,
+                    DateOfBirdh = DateOnly.FromDateTime(DateTime.Now)
                 };
 
                 employee = new Employee()

@@ -30,7 +30,7 @@ namespace Hackathon.Services
 
         public bool IsRegistred(LoginDto input)
         {
-            if (_userService.IsExists(input.Email)!)
+            if (!_userService.IsExists(input.Email))
             {
                 return false;
             }
