@@ -10,14 +10,12 @@ namespace Hackathon.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
-        private readonly IAuthService _authService;
 
 
-        public EmployeeService(ApplicationDbContext dbContext, IUserService userService, IAuthService authService) 
+        public EmployeeService(ApplicationDbContext dbContext, IUserService userService) 
         { 
             _context = dbContext;
-            _userService = userService;
-            _authService = authService;
+            _userService = userService;         
         }
 
         public RegistrationResultDto AddItem(EmployeeRegistrationDto input)
@@ -47,7 +45,7 @@ namespace Hackathon.Services
             {
                 var pwd = new Password(passwordLength: 9, includeSpecial: false, includeLowercase: true, includeUppercase: true, includeNumeric: true);
                 string password = pwd.Next();
-                string passwordHash = _authService.EncodePassword(password);
+                string passwordHash = AuthService.EncodePassword(password);
                 
 
                 Account account = new Account()

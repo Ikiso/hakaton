@@ -44,6 +44,10 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IEducationalMaterialService, EducationalMaterialService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITariffService, TariffService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 
 var app = builder.Build();

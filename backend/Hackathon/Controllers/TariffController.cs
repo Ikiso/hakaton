@@ -23,7 +23,7 @@ namespace Hackathon.Controllers
             return new JsonResult(new { message = "успешно добавлено" });
         }
 
-        [Authorize(Roles = "superadmin")]
+        
         [HttpPost("get")]
         public IActionResult Get(TariffGet tariffGet)
         {
@@ -31,7 +31,7 @@ namespace Hackathon.Controllers
             return new JsonResult(tariff);
         }
 
-        [Authorize(Roles = "superadmin")]
+       
         [HttpGet("getall")]
         public IActionResult GetAll()
         {

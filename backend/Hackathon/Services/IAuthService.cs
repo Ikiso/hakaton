@@ -6,6 +6,6 @@ namespace Hackathon.Services
     {
         string Login(int employeeIdlClaim);
         bool IsRegistred(LoginDto input);
-        string EncodePassword(string password);
+        //string EncodePassword(string password);
     }
 }

@@ -9,6 +9,6 @@ namespace Hackathon.Services
         string GetOrganizationNameById(int id);
         RegistrationResultDto AddItem(EmployeeRegistrationDto input);
         Organization GetOrganizationById(int id);
-        void AddItem(EmployeeRegistrationDto input);
+        
     }
 }
