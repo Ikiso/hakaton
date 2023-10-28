@@ -11,6 +11,6 @@ namespace Hackathon.Services
         public Course GetItem(GetCourseDto getCourse);
 
         public CourseDto GetItemDto(GetCourseDto getCourse);
-        public List<CourseDto> GetItemDtoAll(GetDepartmentDto getDepartment);
+        public List<CourseDto> GetItemDtoAll(int DepartmentId);
     }
 }

@@ -49,10 +49,10 @@ namespace Hackathon.Services
             return _context.EducationalMaterials.Find(id) != null;
         }
 
-        public List<EducationalMaterialDto> GetAllItemDto()
+        public List<EducationalMaterialDto> GetAllItemDto(int idCourse)
         {
             var result = new List<EducationalMaterialDto>();
-            foreach (var item in _context.EducationalMaterials.ToList())
+            foreach (var item in _context.EducationalMaterials.Where(a=>a.CourseId == idCourse).ToList())
             {
                 result.Add(new EducationalMaterialDto(item.Id, item.Content, item.CourseId, item.IsPublic, item.ContentTypeId));
             }

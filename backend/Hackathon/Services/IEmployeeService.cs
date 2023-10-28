@@ -10,5 +10,6 @@ namespace Hackathon.Services
         RegistrationResultDto AddItem(EmployeeRegistrationDto input);
         Organization GetOrganizationById(int id);
         bool EmployeeExistsInCurrentUser(int employeeId, string email);
+        public RegistrationResultDto AddItemChef(EmployeeRegistrationDto input);
     }
 }
