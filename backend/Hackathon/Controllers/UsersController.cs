@@ -18,7 +18,15 @@ namespace Hackathon.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpPost("login")]
+        [Authorize(Roles = "admin,superadmin")]
+        [HttpPost("registration")]
+        public IActionResult Registration(EmployeeRegistrationDto input)
+        {
+            var result = _employeeService.AddItem(input);
+            return new JsonResult(result);
+        }
+
+            [HttpPost("login")]
         public IActionResult Login(LoginDto input)
         {
             if (!_authService.IsRegistred(input))
@@ -32,7 +40,7 @@ namespace Hackathon.Controllers
             if (user.Employees.Count == 1)
             {
                 var accessToken = _authService.Login(user.Employees.First().Id);
-                return new JsonResult(new { accessToken });
+                return new JsonResult(new { accessToken, manyProfiles = false});
             }
             else
             {
@@ -46,7 +54,7 @@ namespace Hackathon.Controllers
                         OrganizationName = _employeeService.GetOrganizationNameById(e.Id)
                     });
                 }
-                return new JsonResult(result);
+                return new JsonResult( new { result, manyProfiles = true });
             }
         }
 

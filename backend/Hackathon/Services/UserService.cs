@@ -11,6 +11,16 @@ namespace Hackathon.Services
             _context = context;   
         }
 
+        public User? GetItem(string email)
+        {
+            return _context.Users.Include(u => u.Account).FirstOrDefault(u => u.Account.Email == email);
+        }
+
+        public User? GetItemById(int id)
+        {
+            return _context.Users.Find(id);
+        }
+
         public User GetItemWithAccount(string email)
         {
             return _context.Users.Include(u => u.Account).Include(u=>u.Employees).FirstOrDefault(u => u.Account.Email == email)!;

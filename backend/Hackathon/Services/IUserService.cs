@@ -6,5 +6,7 @@ namespace Hackathon.Services
     {
         bool IsExists(string email);
         User GetItemWithAccount(string email);
+        User GetItem(string email);
+        User GetItemById(int id);
     }
 }

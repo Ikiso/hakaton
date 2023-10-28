@@ -6,6 +6,6 @@ namespace Hackathon.Services
     {
         string GetRoleById(int id);
         string GetOrganizationNameById(int id);
-        void AddItem(EmployeeRegistrationDto input);
+        RegistrationResultDto AddItem(EmployeeRegistrationDto input);
     }
 }

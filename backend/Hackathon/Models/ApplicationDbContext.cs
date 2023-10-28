@@ -31,8 +31,10 @@ namespace Hackathon.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasData(
-                new Role() { Id = 1, Name = "superuser" },
-                new Role() { Id = 2, Name = "user" }
+                new Role() { Id = 1, Name = "superadmin" },
+                new Role() { Id = 2, Name = "admin" },
+                new Role() { Id = 3, Name = "hr" },
+                new Role() { Id = 4, Name = "user" }
                 );
 
             modelBuilder.Entity<Color>().HasData(

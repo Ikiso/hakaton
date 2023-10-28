@@ -1,6 +1,8 @@
 ﻿using Hackathon.Dtos;
 using Hackathon.Models;
 using Microsoft.EntityFrameworkCore;
+using PasswordGenerator;
+using System.Web;
 
 namespace Hackathon.Services
 {
@@ -8,28 +10,87 @@ namespace Hackathon.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public EmployeeService(ApplicationDbContext dbContext) 
+
+        public EmployeeService(ApplicationDbContext dbContext, IUserService userService, IAuthService authService) 
         { 
             _context = dbContext;
-            _userService = new UserService(dbContext);
+            _userService = userService;
+            _authService = authService;
         }
 
-        public void AddItem(EmployeeRegistrationDto input)
+        public RegistrationResultDto AddItem(EmployeeRegistrationDto input)
         {
             Department department = _context.Departments.Find(input.DepartmentId)!;
-            User user = null!;
-            string password = "";
-            bool emailExists = false;
+            Employee employee = null!;
+            RegistrationResultDto result = null!;
 
             if (_userService.IsExists(input.Email))
             {
-                user = _userService.GetItemWithAccount(input.Email);
-                emailExists = true;
+                employee = new Employee()
+                {
+                    Department = department,
+                    User = _userService.GetItem(input.Email),
+                    // Просто user
+                    Role = _context.Roles.Find(4)!,
+                    // Работает
+                    Status = _context.Statuses.Find(1)!
+                };
+
+                result = new RegistrationResultDto()
+                {
+                    IsNewUser = false
+                };
+            }
+            else
+            {
+                var pwd = new Password(passwordLength: 9, includeSpecial: false, includeLowercase: true, includeUppercase: true, includeNumeric: true);
+                string password = pwd.Next();
+                string passwordHash = _authService.EncodePassword(password);
+                
+
+                Account account = new Account()
+                {
+                    Email = input.Email,
+                    PasswordHash = passwordHash
+                };
+
+
+                User user = new User()
+                {
+                    Account = account,
+                    Firstname = input.Firstname,
+                    Surname = input.Surname,
+                    Patronymic = input.Patronymic
+                };
+
+                employee = new Employee()
+                {
+                    User = user,
+                    Department = department,
+                    // Просто user
+                    Role = _context.Roles.Find(4)!,
+                    // Работает
+                    Status = _context.Statuses.Find(1)!
+                };
+
+                _context.Accounts.Add(account);
+                _context.Users.Add(user);
+
+                result = new RegistrationResultDto()
+                {
+                    Email = input.Email,
+                    Password = password,
+                    IsNewUser = true
+                };
+
             }
 
-            Employee employee = new Employee();
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
 
+            return result;
         }
 
         public string GetOrganizationNameById(int id)
