@@ -65,6 +65,8 @@ namespace Hackathon.Services
             test.StartDate = input.StartDate;
             test.EndDate = input.EndDate;
 
+            _context.SaveChanges();
+
         }
 
         public List<TestGetDto> GetAllLong(GetAllTestsDto input)
@@ -149,8 +151,9 @@ namespace Hackathon.Services
 
         public void DeleteItem(int id)
         {
-            var question = _context.Questions.Find(id)!;
-            _context.Questions.Remove(question);
+            var test = _context.Tests.Find(id)!;
+            _context.Tests.Remove(test);
+            _context.SaveChanges();
         }
 
         public int AddItem(AddTestDto input)
@@ -189,8 +192,8 @@ namespace Hackathon.Services
                 Description = input.Description,
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
-                Questions = questions
-
+                Questions = questions,
+                Course = _context.Courses.Find(input.CourseId)!
             };
 
             var result = _context.Tests.Add(test);
@@ -202,6 +205,26 @@ namespace Hackathon.Services
         public bool IsExists(int id)
         {
             return _context.Tests.Find(id) != null;
+        }
+
+        public bool AccessAllowedEmployee(int employeeId, int testId)
+        {
+            var employee = _context.Employees.Include(e => e.Department).
+                FirstOrDefault(e => e.Id == employeeId)!;
+
+            var test = _context.Tests.Include(t => t.Course).ThenInclude(c => c.Department).FirstOrDefault(t=>t.Id == testId)!;
+
+            return employee.DepartmentId == test.Course.DepartmentId;
+        }
+
+        public bool AccessAllowedByCourseId(int employeeId, int courseId)
+        {
+            var employee = _context.Employees.Include(e => e.Department).
+                FirstOrDefault(e => e.Id == employeeId)!;
+
+            var course = _context.Courses.Find(courseId)!;
+
+            return course.DepartmentId == employee.DepartmentId;
         }
     }
 }

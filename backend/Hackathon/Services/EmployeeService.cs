@@ -18,6 +18,25 @@ namespace Hackathon.Services
             _userService = userService;         
         }
 
+        public bool EmployeeExistsInCurrentUser(int employeeId, string email)
+        {
+            var users = _context.Users.Include(u => u.Account).
+                Include(u => u.Employees).
+                FirstOrDefault(u => u.Account.Email == email)!;
+
+            var employees = users.Employees;
+
+            foreach (var e in employees)
+            {
+                if (e.Id == employeeId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public RegistrationResultDto AddItem(EmployeeRegistrationDto input)
         {
             Department department = _context.Departments.Find(input.DepartmentId)!;
@@ -27,6 +46,7 @@ namespace Hackathon.Services
             if (_userService.IsExists(input.Email))
             {
                 //TODO: Проерять при валидации существет ли работник с таким же подразделением или нет
+                //TODO: Проерять при валидации существет ли работник в той же организации
                 employee = new Employee()
                 {
                     Department = department,

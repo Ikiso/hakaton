@@ -12,5 +12,7 @@ namespace Hackathon.Services
         void DeleteItem(int id);
         int AddItem(AddTestDto input);
         bool IsExists(int id);
+        bool AccessAllowedEmployee(int employeeId, int testId);
+        bool AccessAllowedByCourseId(int employeeId, int courseId);
     }
 }

@@ -6,7 +6,7 @@
         public string? Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int? CourseId { get; set; }
+        public int CourseId { get; set; } 
 
         public List<QuestionAddDto> Questions { get; set; } = new();
 
@@ -20,5 +20,5 @@
         public List<OptionAddDto> Options { get; set; } = new();
     }
 
-    public record class OptionAddDto(int Id, string Name, bool IsCorrect);
+    public record class OptionAddDto(string Name, bool IsCorrect);
 }

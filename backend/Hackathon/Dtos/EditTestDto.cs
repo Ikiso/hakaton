@@ -17,7 +17,7 @@
         public int Id { get; set; }
         public int Points { get; set; }
         public string Content { get; set; } = null!;
-        public List<OptionAddDto> Options { get; set; } = new();
+        public List<OptionEditDto> Options { get; set; } = new();
     }
 
     public record class OptionEditDto(int Id,string Name, bool IsCorrect);

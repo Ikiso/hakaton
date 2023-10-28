@@ -11,7 +11,7 @@ namespace Hackathon.Controllers
         readonly IAuthService _authService;
         readonly IUserService _userService;
         readonly IEmployeeService _employeeService;
-        public UsersController(IAuthService authService, IUserService userService, IEmployeeService employeeService)
+        public UsersController(IAuthService authService, IEmployeeService employeeService, IUserService userService)
         {
             _authService = authService;
             _userService = userService;
@@ -61,7 +61,9 @@ namespace Hackathon.Controllers
         [HttpPost("loginmany")]
         public IActionResult LoginManyOrganization(LoginManyOrganization input)
         {
-            if (!_authService.IsRegistred(new LoginDto() { Email = input.Email, Password = input.Password}))
+            if (!_authService.IsRegistred(new LoginDto() { Email = input.Email, Password = input.Password}) ||
+                !_employeeService.EmployeeExistsInCurrentUser(input.EmployeeId, input.Email)
+                )
             {
                 return StatusCode(401, new { message = "Аутентификация не пройдена" });
             }

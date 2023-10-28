@@ -18,6 +18,12 @@ namespace Hackathon.Controllers
         [HttpPost("add")]
         public IActionResult Add(AddTestDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId)) 
+            {
+                return NotFound();
+            }
+
             int id = _testService.AddItem(input);
             return new JsonResult(new { id });
         }
@@ -26,7 +32,13 @@ namespace Hackathon.Controllers
         [HttpPost("delete")]
         public IActionResult Delete(DeleteTestDto input)
         {
-           _testService.DeleteItem(input.Id);
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedEmployee(employeeId, input.Id))
+            {
+                return NotFound();
+            }
+
+            _testService.DeleteItem(input.Id);
             return Ok();
         }
 
@@ -34,6 +46,13 @@ namespace Hackathon.Controllers
         [HttpPost("getshort")]
         public IActionResult GetShort(GetTestByIdDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedEmployee(employeeId, input.Id))
+            {
+                return NotFound();
+            }
+            
+
             var result = _testService.GetItemShort(input.Id);
             return new JsonResult(result);
         }
@@ -42,6 +61,12 @@ namespace Hackathon.Controllers
         [HttpPost("getallshort")]
         public IActionResult GetAllShort(GetAllTestsDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId))
+            {
+                return NotFound();
+            }
+
             var result = _testService.GetAllShort(input);
             return new JsonResult(result);
         }
@@ -50,6 +75,12 @@ namespace Hackathon.Controllers
         [HttpPost("getlong")]
         public IActionResult GetLong(GetTestByIdDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedEmployee(employeeId, input.Id))
+            {
+                return NotFound();
+            }
+
             var result = _testService.GetItemLong(input.Id);
             return new JsonResult(result);
         }
@@ -58,6 +89,12 @@ namespace Hackathon.Controllers
         [HttpPost("getalllong")]
         public IActionResult GetAllLong(GetAllTestsDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId))
+            {
+                return NotFound();
+            }
+
             var result = _testService.GetAllLong(input);
             return new JsonResult(result);
         }
@@ -68,6 +105,12 @@ namespace Hackathon.Controllers
         [HttpPost("edit")]
         public IActionResult Edit(EditTestDto input)
         {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedEmployee(employeeId, input.Id))
+            {
+                return NotFound();
+            }
+
             _testService.EditItem(input);
             return Ok();
         }
