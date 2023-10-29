@@ -52,9 +52,9 @@ namespace Hackathon.Services
         public List<EducationalMaterialDto> GetAllItemDto(int idCourse)
         {
             var result = new List<EducationalMaterialDto>();
-            foreach (var item in _context.EducationalMaterials.Where(a=>a.CourseId == idCourse).ToList())
+            foreach (var item in _context.EducationalMaterials.Where(a=>a.CourseId == idCourse).Include(a=>a.ContentType).ToList())
             {
-                result.Add(new EducationalMaterialDto(item.Id, item.Content, item.CourseId, item.IsPublic, item.ContentTypeId));
+                result.Add(new EducationalMaterialDto(item.Id, item.Content, item.CourseId, item.IsPublic,item.ContentType.Name, item.ContentTypeId));
             }
             return result;
         }
@@ -66,8 +66,8 @@ namespace Hackathon.Services
 
         public EducationalMaterialDto GetItemDto(EducationalMaterialGet materialGet)
         {
-            var material = _context.EducationalMaterials.Find(materialGet.id)!;
-            var result = new EducationalMaterialDto(material.Id, material.Content, material.CourseId, material.IsPublic, material.ContentTypeId);
+            var material = _context.EducationalMaterials.FirstOrDefault(a=>a.Id == materialGet.id)!;
+            var result = new EducationalMaterialDto(material.Id, material.Content, material.CourseId, material.IsPublic, material.ContentType.Name, material.ContentTypeId);
             return result;
         }
     }

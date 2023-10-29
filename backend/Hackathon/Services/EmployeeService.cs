@@ -12,10 +12,10 @@ namespace Hackathon.Services
         private readonly IUserService _userService;
 
 
-        public EmployeeService(ApplicationDbContext dbContext, IUserService userService) 
-        { 
+        public EmployeeService(ApplicationDbContext dbContext, IUserService userService)
+        {
             _context = dbContext;
-            _userService = userService;         
+            _userService = userService;
         }
 
         public bool EmployeeExistsInCurrentUser(int employeeId, string email)
@@ -67,7 +67,7 @@ namespace Hackathon.Services
                 var pwd = new Password(passwordLength: 9, includeSpecial: false, includeLowercase: true, includeUppercase: true, includeNumeric: true);
                 string password = pwd.Next();
                 string passwordHash = AuthService.EncodePassword(password);
-                
+
 
                 Account account = new Account()
                 {
@@ -205,7 +205,39 @@ namespace Hackathon.Services
 
         public string GetRoleById(int id)
         {
-            return _context.Employees.Include(e => e.Role).FirstOrDefault(e=>e.Id == id)!.Role.Name;
+            return _context.Employees.Include(e => e.Role).FirstOrDefault(e => e.Id == id)!.Role.Name;
+        }
+        public Employee GetById(int id)
+        {
+            return _context.Employees.Include(e => e.Role).FirstOrDefault(e => e.Id == id)!;
+        }
+
+        public Employee EditItem(EmployeeEditDto input)
+        {
+            var employee = _context.Employees.Find(input.id)!;
+            employee.Status = _context.Statuses.Find(input.StatusId)!;
+            employee.Role = _context.Roles.Find(input.RoleId)!;
+            employee.Department = _context.Departments.Find(input.DepartmentId)!;
+            employee.Post = input.Post;
+            _context.SaveChanges();
+            return employee;
+        }
+
+        public List<EmployeeGetDto> GetAll(int idOrganization)
+        {
+            var organization = _context.Organizations.Include(a => a.Departments).FirstOrDefault(a => a.Id == idOrganization)!;
+            var result = new List<EmployeeGetDto>();
+            foreach (var department in organization.Departments)
+            {
+                //var departmentInfo = _context.Departments.FirstOrDefault(a => a.Id == department.Id)!;
+                var employeees = _context.Employees.Where(a => a.DepartmentId == department.Id)!;
+                foreach (var user in employeees)
+                {
+                    var userinfo = _context.Users.Find(user.UserId)!;
+                    result.Add(new EmployeeGetDto(user.Id, userinfo.Firstname, userinfo.Surname, userinfo.Patronymic!, user.Post!, user.RoleId, user.StatusId, user.DepartmentId));
+                }
+            }
+            return result;
         }
     }
 }
