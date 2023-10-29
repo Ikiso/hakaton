@@ -1,0 +1,9 @@
+export const ROUTE_MAIN_MENU = '/';
+export const ROUTE_AUTH = '/auth';
+export const ROUTE_REGISTER = '/register';
+export const ROUTE_RATE = '/rate';
+export const ROUTE_OPPORTUNITIES = '/opportunities';
+export const ROUTE_FEEDBACK = '/feedback';
+export const ROUTE_USER_PROFILE = '/profile';
+export const ROUTE_INTEGRATION = '/integration';
+export const ROUTE_USER_PROFILE_COMPANY = '/profile/company';
