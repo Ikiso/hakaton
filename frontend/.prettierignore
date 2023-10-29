@@ -1,0 +1,10 @@
+node_modules/
+package*.json
+tsconfig.json
+tsconfig.node.json
+index.html
+.prettierignore
+.eslintignore
+*.cjs
+vite.config.ts
+vite-env.d.ts

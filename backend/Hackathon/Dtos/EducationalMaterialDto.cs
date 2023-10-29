@@ -13,6 +13,6 @@ namespace Hackathon.Dtos
     }
 
     public record class EducationalMaterialGet(int id);
-    public record class EducationalMaterialDto(int Id, string Content, int CourseId, bool IsPuplic, int ContentTypeId);
+    public record class EducationalMaterialDto(int Id, string Content, int CourseId, bool IsPuplic, string ContentType, int ContentTypeId);
     public record class EducationalMaterialCreate(string Content, int CourseId, bool IsPuplic, int ContentTypeId);
 }

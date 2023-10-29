@@ -1,0 +1,6 @@
+export enum AuthActionsEnum {
+  AUTH_LOGIN = 'AUTH_LOGIN',
+  AUTH_LOGOUT = 'AUTH_LOGOUT',
+  AUTH_SET_USER = 'AUTH_SET_USER',
+  AUTH_CLEAR_USER = 'AUTH_CLEAR_USER',
+}
