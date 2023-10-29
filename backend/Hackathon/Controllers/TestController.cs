@@ -15,6 +15,27 @@ namespace Hackathon.Controllers
         }
 
         [Authorize(Roles = "admin,superadmin,hr,user")]
+        [HttpGet("passed")]
+        public IActionResult Passed()
+        {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            var result = _testService.GetPassedTests(employeeId);
+
+            return new JsonResult(result);
+        }
+
+        [Authorize(Roles = "admin,superadmin,hr,user")]
+        [HttpGet("passedshort")]
+        public IActionResult PassedShort()
+        {
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            var result = _testService.GetPassedByLastAttTests(employeeId);
+
+            return new JsonResult(result);
+        }
+
+
+        [Authorize(Roles = "admin,superadmin,hr,user")]
         [HttpPost("solution")]
         public IActionResult Solution(AttemptTestDto input)
         {
@@ -28,12 +49,12 @@ namespace Hackathon.Controllers
             return new JsonResult(result);
         }
 
-            [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr")]
         [HttpPost("add")]
         public IActionResult Add(AddTestDto input)
         {
             int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
-            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId)) 
+            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId))
             {
                 return NotFound();
             }
@@ -56,7 +77,7 @@ namespace Hackathon.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr,user")]
         [HttpPost("getshort")]
         public IActionResult GetShort(GetTestByIdDto input)
         {
@@ -65,13 +86,13 @@ namespace Hackathon.Controllers
             {
                 return NotFound();
             }
-            
+
 
             var result = _testService.GetItemShort(input.Id);
             return new JsonResult(result);
         }
 
-        [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr,user")]
         [HttpPost("getallshort")]
         public IActionResult GetAllShort(GetAllTestsDto input)
         {
@@ -85,7 +106,23 @@ namespace Hackathon.Controllers
             return new JsonResult(result);
         }
 
-        [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr,user")]
+        [HttpPost("getallinfo")]
+        public IActionResult GetAllShortinfo(GetAllTestsDto input)
+        {
+
+            int employeeId = Convert.ToInt32(HttpContext.User.Identity!.Name);
+            if (!_testService.AccessAllowedByCourseId(employeeId, input.CourseId))
+            {
+                return NotFound();
+            }
+
+            var result = _testService.GetAllWithAttInfo(input, employeeId);
+            return new JsonResult(result);
+        }
+
+
+        [Authorize(Roles = "admin,superadmin,hr,user")]
         [HttpPost("getlong")]
         public IActionResult GetLong(GetTestByIdDto input)
         {
@@ -99,7 +136,7 @@ namespace Hackathon.Controllers
             return new JsonResult(result);
         }
 
-        [Authorize(Roles = "admin,superadmin,hr")]
+        [Authorize(Roles = "admin,superadmin,hr,user")]
         [HttpPost("getalllong")]
         public IActionResult GetAllLong(GetAllTestsDto input)
         {

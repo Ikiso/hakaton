@@ -95,6 +95,44 @@ namespace Hackathon.Services
             return result;
         }
 
+        public List<TestGetItemInfo> GetAllWithAttInfo(GetAllTestsDto input, int employeeId)
+        {
+
+            var passedTests = GetPassedByLastAttTests(employeeId);
+            var allTests = GetAllShort(input);
+            List<TestGetItemInfo> result = new();
+
+            foreach (var test in allTests)
+            {
+                var passed = passedTests.FirstOrDefault(t => t.Id == test.Id);
+                if (passed != null)
+                {
+                    result.Add(new TestGetItemInfo()
+                    {
+                        Description = test.Description,
+                        StartDate = test.StartDate,
+                        EndDate = test.EndDate,
+                        Name = test.Name,
+                        IsPassed = true,
+                        AttemptionNumber = passed.AttemptNumber,
+                        Percent = passed.Percent
+                    });
+                }
+                else
+                {
+                    result.Add(new TestGetItemInfo()
+                    {
+                        Description = test.Description,
+                        StartDate = test.StartDate,
+                        EndDate = test.EndDate,
+                        Name = test.Name,
+                        IsPassed = false
+                    });
+                }
+            }
+
+            return result;
+        }
 
         public TestGetDto GetItemLong(int id)
         {
@@ -231,10 +269,32 @@ namespace Hackathon.Services
         {
             int maxPoints = 0;
             int totalPoints = 0;
+            int numberOfPassed = 0;
+
+            var passedTests = GetPassedTests(employeeId);
+
+            foreach (var passed in passedTests)
+            {
+                if (passed.Id == input.TestId)
+                {
+                    numberOfPassed++;
+                }
+            }
 
             foreach (var opt in input.SelectedOptions)
             {
                 var option = _context.Options.Include(o=>o.Question).FirstOrDefault(o=>o.Id == opt)!;
+
+                if (option.Question.TestId != input.TestId)
+                {
+                    return new TestResultDto()
+                    {
+                        Percent = 0,
+                        ResultPoints = 0,
+                        TestId = 0
+                    };
+                }
+
                 maxPoints += option.Question.Points;
                 if (option.IsCorrect)
                 {
@@ -248,7 +308,8 @@ namespace Hackathon.Services
             {
                 Test = _context.Tests.Find(input.TestId)!,
                 Employee = _context.Employees.Find(employeeId)!,
-                CompletionPercent = percent
+                CompletionPercent = percent,
+                AttemptNumber = numberOfPassed + 1
             };
 
             _context.PassedTests.Add(passedTest);
@@ -258,8 +319,61 @@ namespace Hackathon.Services
             {
                 Percent = percent,
                 ResultPoints = totalPoints,
-                TestId = input.TestId
+                TestId = input.TestId,
+                NumberOfPassed = numberOfPassed + 1
             };
+        }
+
+        public List<PassedTestsGetDto> GetPassedTests(int employeeId)
+        {
+            List<PassedTestsGetDto> result = new();
+            var employee = _context.Employees.Include(e => e.PassedTests).ThenInclude(p=>p.Test).FirstOrDefault(e => e.Id == employeeId)!;
+
+            foreach (var test in employee.PassedTests)
+            {
+                result.Add(new PassedTestsGetDto()
+                {
+                    Id = test.TestId,
+                    Name = test.Test.Name,
+                    Percent = (int)test.CompletionPercent,
+                    AttemptNumber = test.AttemptNumber
+                });
+            }
+
+            return result;
+        }
+
+        public List<PassedTestsGetDto> GetPassedByLastAttTests(int employeeId)
+        {
+            List<PassedTestsGetDto> result = new();
+            List<PassedTestsGetDto> result2 = new();
+            var employee = _context.Employees.Include(e => e.PassedTests).ThenInclude(p => p.Test).FirstOrDefault(e => e.Id == employeeId)!;
+
+            foreach (var test in employee.PassedTests)
+            {
+
+                result.Add(new PassedTestsGetDto()
+                {
+                    Id = test.TestId,
+                    Name = test.Test.Name,
+                    Percent = (int)test.CompletionPercent,
+                    AttemptNumber = test.AttemptNumber
+                });
+            }
+
+            var testIds = employee.PassedTests.GroupBy(t => t.TestId).Select(t=>t.First());
+            
+            foreach (var test in testIds)
+            {
+                int maxAttemption = result.Where(t => t.Id == test.TestId).Max(t => t.AttemptNumber);
+                var testLast = result.Where(t => t.Id == test.TestId).FirstOrDefault(t => t.AttemptNumber == maxAttemption);
+                result2.Add(testLast!);
+            }
+            
+
+            //result.Where(t => t.Id == test.TestId).Max(t => t.AttemptNumber);
+
+            return result2;
         }
     }
 }

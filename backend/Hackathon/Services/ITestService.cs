@@ -15,5 +15,8 @@ namespace Hackathon.Services
         bool AccessAllowedEmployee(int employeeId, int testId);
         bool AccessAllowedByCourseId(int employeeId, int courseId);
         TestResultDto SolutionTest(AttemptTestDto input, int employeeId);
+        List<PassedTestsGetDto> GetPassedTests(int employeeId);
+        List<PassedTestsGetDto> GetPassedByLastAttTests(int employeeId);
+        List<TestGetItemInfo> GetAllWithAttInfo(GetAllTestsDto input, int employeeId);
     }
 }

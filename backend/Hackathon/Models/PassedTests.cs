@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;
+        public int AttemptNumber { get; set; }
         public int TestId { get; set; }
         public Test Test { get; set; } = null!;
         public double CompletionPercent { get; set; }

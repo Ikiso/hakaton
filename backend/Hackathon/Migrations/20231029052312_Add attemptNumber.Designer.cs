@@ -3,6 +3,7 @@ using System;
 using Hackathon.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hackathon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231029052312_Add attemptNumber")]
+    partial class AddattemptNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.23");
@@ -49,20 +51,6 @@ namespace Hackathon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "myemail@mail.com",
-                            PasswordHash = "A02CB78D91D3079A6D245A45FDBEC9472C25C323"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "myemail2@mail.com",
-                            PasswordHash = "B12D0A0F9688163B3A744B87A2340904018986D7"
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Answer", b =>
@@ -164,29 +152,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Courses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DepartmentId = 2,
-                            Description = "Это курс про веб",
-                            Name = "Веб-разработка"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DepartmentId = 2,
-                            Description = "Это курс про тестирование",
-                            Name = "Тестирование"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DepartmentId = 2,
-                            Description = "Это курс про разработку игр",
-                            Name = "Разработка игр"
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Department", b =>
@@ -212,32 +177,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "HR ",
-                            OrganizationId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "IT ",
-                            OrganizationId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "IT ",
-                            OrganizationId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "HR ",
-                            OrganizationId = 2
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.EducationalMaterial", b =>
@@ -266,80 +205,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("EducationalMaterials");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "Веб-разработка это ...",
-                            ContentTypeId = 1,
-                            CourseId = 1,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "https://www.youtube.com/watch?v=Ot1dBokdPFw",
-                            ContentTypeId = 3,
-                            CourseId = 1,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Content = "Итак мы поняли, что веб-разработка это ...",
-                            ContentTypeId = 1,
-                            CourseId = 1,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Content = "Тестирование это ...",
-                            ContentTypeId = 1,
-                            CourseId = 2,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Content = "https://www.youtube.com/watch?v=liirXTlmmRY",
-                            ContentTypeId = 3,
-                            CourseId = 2,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Content = "Итак мы поняли, что тестирование это ...",
-                            ContentTypeId = 1,
-                            CourseId = 2,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Content = "Разработка игр ...",
-                            ContentTypeId = 1,
-                            CourseId = 3,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Content = "https://www.youtube.com/watch?v=nRGOW9O7ARk",
-                            ContentTypeId = 3,
-                            CourseId = 3,
-                            IsPublic = true
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Content = "Итак мы поняли ...",
-                            ContentTypeId = 1,
-                            CourseId = 3,
-                            IsPublic = true
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Employee", b =>
@@ -374,24 +239,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DepartmentId = 2,
-                            RoleId = 2,
-                            StatusId = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DepartmentId = 2,
-                            RoleId = 4,
-                            StatusId = 1,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Option", b =>
@@ -415,204 +262,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Options");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsCorrect = false,
-                            Name = "Пункт 2",
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsCorrect = false,
-                            Name = "Пункт 3",
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsCorrect = true,
-                            Name = "Пункт 4",
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsCorrect = false,
-                            Name = "Пункт 3",
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsCorrect = false,
-                            Name = "Пункт 4",
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 3
-                        },
-                        new
-                        {
-                            Id = 11,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 4
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 4
-                        },
-                        new
-                        {
-                            Id = 13,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 6
-                        },
-                        new
-                        {
-                            Id = 16,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 6
-                        },
-                        new
-                        {
-                            Id = 17,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 7
-                        },
-                        new
-                        {
-                            Id = 18,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 7
-                        },
-                        new
-                        {
-                            Id = 19,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 8
-                        },
-                        new
-                        {
-                            Id = 20,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 8
-                        },
-                        new
-                        {
-                            Id = 21,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 9
-                        },
-                        new
-                        {
-                            Id = 22,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 9
-                        },
-                        new
-                        {
-                            Id = 23,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 10
-                        },
-                        new
-                        {
-                            Id = 24,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 10
-                        },
-                        new
-                        {
-                            Id = 25,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 11
-                        },
-                        new
-                        {
-                            Id = 26,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 11
-                        },
-                        new
-                        {
-                            Id = 27,
-                            IsCorrect = false,
-                            Name = "Пункт 1",
-                            QuestionId = 12
-                        },
-                        new
-                        {
-                            Id = 28,
-                            IsCorrect = true,
-                            Name = "Пункт 2",
-                            QuestionId = 12
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Organization", b =>
@@ -655,26 +304,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("TariffId");
 
                     b.ToTable("Organizations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Орловская область, город Люберцы, въезд Бухарестская, 34",
-                            ColorId = 1,
-                            Inn = "1231231321231",
-                            Name = "Technopoint",
-                            TariffId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Новгородская область, город Можайск, пер. Будапештсткая, 79",
-                            ColorId = 1,
-                            Inn = "234324324234",
-                            Name = "JustOrganization",
-                            TariffId = 1
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.PassedTests", b =>
@@ -705,17 +334,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("PassedTests");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AttemptNumber = 1,
-                            CompletionPercent = 67.0,
-                            EmployeeId = 2,
-                            IsOver = true,
-                            TestId = 1
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Question", b =>
@@ -739,92 +357,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("Questions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "Вопоос 1 ...",
-                            Points = 1,
-                            TestId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "Вопоос 2 ...",
-                            Points = 1,
-                            TestId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Content = "Вопоос 3 ...",
-                            Points = 1,
-                            TestId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Content = "Вопоос 4 ...",
-                            Points = 1,
-                            TestId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Content = "Вопоос 1 ...",
-                            Points = 1,
-                            TestId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Content = "Вопоос 2 ...",
-                            Points = 1,
-                            TestId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Content = "Вопоос 3 ...",
-                            Points = 1,
-                            TestId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Content = "Вопоос 4 ...",
-                            Points = 1,
-                            TestId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Content = "Вопоос 1 ...",
-                            Points = 1,
-                            TestId = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Content = "Вопоос 2 ...",
-                            Points = 1,
-                            TestId = 3
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Content = "Вопоос 3 ...",
-                            Points = 1,
-                            TestId = 3
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Content = "Вопоос 4 ...",
-                            Points = 1,
-                            TestId = 3
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.Role", b =>
@@ -987,35 +519,6 @@ namespace Hackathon.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Tests");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CourseId = 1,
-                            Description = "Тест по веб-разработке",
-                            EndDate = new DateTime(2023, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Тест1",
-                            StartDate = new DateTime(2023, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CourseId = 2,
-                            Description = "Тест по тестированию",
-                            EndDate = new DateTime(2023, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Тест2",
-                            StartDate = new DateTime(2023, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CourseId = 3,
-                            Description = "Тест по рабработке игр",
-                            EndDate = new DateTime(2023, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Тест3",
-                            StartDate = new DateTime(2023, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Hackathon.Models.User", b =>
@@ -1050,26 +553,6 @@ namespace Hackathon.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            DateOfBirdh = new DateOnly(2000, 2, 23),
-                            Firstname = "Глеб",
-                            Patronymic = "Артемович",
-                            Surname = "Рогов"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccountId = 2,
-                            DateOfBirdh = new DateOnly(1998, 2, 23),
-                            Firstname = "Иванов",
-                            Patronymic = "Максимович",
-                            Surname = "Артем"
-                        });
                 });
 
             modelBuilder.Entity("AnswerOption", b =>

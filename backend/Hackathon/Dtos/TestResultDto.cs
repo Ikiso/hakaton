@@ -5,5 +5,6 @@
         public int TestId { get; set; }
         public int ResultPoints{ get; set; }
         public double Percent { get; set; }
+        public int NumberOfPassed { get; set; }
     }
 }
